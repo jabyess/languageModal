@@ -1,4 +1,6 @@
-(function(w,d) {
+
+(function(w, d) {
+  "use strict";
 
   var preference = w.localStorage.getItem('mia-language-preference');
 
@@ -6,8 +8,11 @@
   var spanishRedirect = 'http://es.miausa.org';
 
   var writeLanguageCookie = function(lang) {
-    window.localStorage.setItem('mia-language-preference', lang);
+    w.localStorage.setItem('mia-language-preference', lang);
   };
+  // var resetLanguageCookie = function() {
+  //   w.localStorage.removeItem('mia-language-preference');
+  // };
 
   var buildModalWrapper = function() {
     var modalWrapper = d.createElement('div');
@@ -19,7 +24,7 @@
     modalWrapper.id = 'langModalWrapper';
 
     return modalWrapper;
-  }
+  };
 
   var buildModal = function() {
     var modal = d.createElement('div');
@@ -32,7 +37,7 @@
     modal.id = 'langModal';
 
     return modal;
-  }
+  };
 
   var buildModalText = function(text) {
     var mt = d.createElement('div');
@@ -44,7 +49,7 @@
     mt.appendChild(d.createTextNode(text));
 
     return mt;
-  }
+  };
 
   var buildModalButton = function(language) {
     var mb = d.createElement('button');
@@ -55,48 +60,54 @@
     mb.style.display = "block";
     mb.style.margin = "10px auto";
     mb.style.padding = "10px";
-    mb.style.color = "#ff3233"
+    mb.style.color = "#ff3233";
     mb.style.cursor = "pointer";
     mb.style.fontFamily = "Helvetica Neue";
     mb.id = "mia-" + language;
     mb.appendChild(d.createTextNode(language));
 
     return mb;
-  }
+  };
 
   var popupLanguageWindow = function() {
     var modalWrapper = buildModalWrapper();
     var modal = buildModal();
     d.body.appendChild(modalWrapper);
-    mw = d.getElementById('langModalWrapper');
-    mb1 = buildModalButton('English');
-    mb2 = buildModalButton('Espanol');
-    mt = buildModalText('Please select your language');
+    var lmw = d.getElementById('langModalWrapper');
+    var mb1 = buildModalButton('English');
+    var mb2 = buildModalButton('Espanol');
+    var mt = buildModalText('Please select your language');
 
-    mw.appendChild(modal);
+    lmw.appendChild(modal);
 
-    mb = d.getElementById('langModal');
+    var mb = d.getElementById('langModal');
 
     mb.appendChild(mt);
     mb.appendChild(mb1);
     mb.appendChild(mb2);
-  }
+  };
 
   var addClickListeners = function() {
     var eng = d.getElementById('mia-English');
     var esp = d.getElementById('mia-Espanol');
+    // var clr = d.getElementById('clear');
 
-    eng.addEventListener('click',function() {
+    eng.addEventListener('click', function() {
       writeLanguageCookie('english');
-      window.location.href = englishRedirect;
+      w.location.href = englishRedirect;
     });
 
     esp.addEventListener('click', function() {
-      window.location.href = spanishRedirect;
+      w.location.href = spanishRedirect;
       writeLanguageCookie('spanish');
     });
-  }
-  
+    // clr.addEventListener('click', function() {
+    //   w.console.log('clicked and clearing');
+    //
+    //   resetLanguageCookie();
+    // });
+  };
+
   var init = function() {
     if(preference && preference.length && preference.length > 0) {
       writeLanguageCookie(preference);
@@ -105,8 +116,10 @@
       popupLanguageWindow();
       addClickListeners();
     }
-  }
+  };
 
-  init();
+  d.addEventListener('DOMContentLoaded', function() {
+    init();
+  });
 
 })(window, document);
